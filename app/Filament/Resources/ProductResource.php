@@ -84,12 +84,12 @@ class ProductResource extends Resource
                     TextInput::make('stock')
                         ->required()
                         ->rules('integer'),
-                    Radio::make('is_favorite')
-                        ->required()
-                        ->options([
-                            '1' => 'Yes',
-                            '0' => 'No',
-                        ]),
+                    // Radio::make('is_favorite')
+                    //     ->required()
+                    //     ->options([
+                    //         '1' => 'Yes',
+                    //         '0' => 'No',
+                    //     ]),
                     FileUpload::make('image')
                         ->image()
                         ->required()

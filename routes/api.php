@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,8 +27,14 @@ Route::post('/login', [AuthController::class, 'login']);
 // logout
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
+// logout
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
 // default sanctum protection
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
 
 // get all categories
 Route::middleware('auth:sanctum')->get('/categories', [CategoryController::class, 'all']);
+
+// get all products
+Route::middleware('auth:sanctum')->get('/products', [ProductController::class, 'all']);
