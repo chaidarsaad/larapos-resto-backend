@@ -43,7 +43,6 @@ class ProductResource extends Resource
             ->schema([
                 Card::make([
                     TextInput::make('name')
-
                         ->required()
                         ->unique(ignoreRecord: true)
                         ->live()
@@ -83,25 +82,12 @@ class ProductResource extends Resource
                         ->required(),
                     TextInput::make('stock')
                         ->required()
+                        ->tel()
                         ->rules('integer'),
-                    // Radio::make('is_favorite')
-                    //     ->required()
-                    //     ->options([
-                    //         '1' => 'Yes',
-                    //         '0' => 'No',
-                    //     ]),
                     FileUpload::make('image')
                         ->image()
                         ->required()
                         ->preserveFilenames()
-                    // ->imageEditor()
-                    // ->imageEditorAspectRatios([
-                    //     '16:9',
-                    //     '4:3',
-                    //     '1:1',
-                    //     null,
-                    // ])
-                    // ->imageEditorMode(2)
                 ])
             ]);
     }
