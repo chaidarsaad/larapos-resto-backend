@@ -12,5 +12,12 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $user = new \App\Models\User();
+        $user->name = 'chaidar';
+        $user->email = 'chaidar@gmail.com';
+        $user->password = bcrypt('aaaaaaaa');
+        $user->role = 'admin';
+        $user->save();
     }
 }
