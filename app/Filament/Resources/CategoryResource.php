@@ -12,13 +12,16 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class CategoryResource extends Resource
 {
@@ -45,15 +48,6 @@ class CategoryResource extends Resource
                     FileUpload::make('image')
                         ->image()
                         ->required()
-                        ->preserveFilenames()
-                    // ->imageEditor()
-                    // ->imageEditorAspectRatios([
-                    //     '16:9',
-                    //     '4:3',
-                    //     '1:1',
-                    //     null,
-                    // ])
-                    // ->imageEditorMode(2)
                 ])
             ]);
     }
@@ -70,9 +64,17 @@ class CategoryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make(),
-
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->successNotificationTitle('Category deleted'),
+                ])
+                    ->label('More Actions')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->size(ActionSize::Small)
+                    ->color('primary')
+                    ->button()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -18,6 +18,8 @@ class StatsOverview extends BaseWidget
     {
         return [
             Stat::make('Total Product', Product::count())
+                ->chart([7, 2, 10, 3, 15, 4, 17])
+                ->color('success')
         ];
     }
 }

@@ -27,6 +27,10 @@ Route::post('/login', [AuthController::class, 'login']);
 // logout
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
+// get all users data
+Route::middleware('auth:sanctum')->get('/getusers', [AuthController::class, 'getAllUserData']);
+
+
 // logout
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 

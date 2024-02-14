@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'roles'
+        'role'
     ];
 
     /**
@@ -47,7 +47,7 @@ class User extends Authenticatable
     protected static function booted(): void
     {
         static::creating(function (User $user) {
-            $user->roles = 'karyawan';
+            $user->role = 'kasir';
         });
     }
 }

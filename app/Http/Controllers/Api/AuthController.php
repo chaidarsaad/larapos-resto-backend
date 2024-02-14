@@ -10,6 +10,18 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function getAllUserData()
+    {
+        $countuser = User::count();
+        $users = User::all();
+        return response()->json([
+            'messages' => 'berhasil mendapatkan ' . $countuser . " users",
+            'success' => true,
+            'data' => [
+                'user' => $users
+            ],
+        ], 200);
+    }
     public function getUserData(Request $request)
     {
         return response()->json([

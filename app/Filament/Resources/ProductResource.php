@@ -7,6 +7,7 @@ use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\Product;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\FileUpload;
@@ -19,8 +20,10 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -28,6 +31,7 @@ use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ProductResource extends Resource
 {
@@ -85,9 +89,8 @@ class ProductResource extends Resource
                         ->tel()
                         ->rules('integer'),
                     FileUpload::make('image')
-                        ->image()
+                        ->acceptedFileTypes(['image/jpeg', 'image/png'])
                         ->required()
-                        ->preserveFilenames()
                 ])
             ]);
     }
@@ -97,20 +100,32 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->searchable(),
-                TextColumn::make('slug')->searchable(),
-                TextColumn::make('price')->searchable(),
+                // TextColumn::make('slug')->searchable(),
+                TextColumn::make('category.name')->searchable(),
+                TextColumn::make('price')
+                    ->searchable()
+                    ->money('idr'),
                 TextColumn::make('stock')->searchable(),
                 ImageColumn::make('image')
             ])
+            // ->defaultSort('created_at', 'desc')
             ->filters([
                 TernaryFilter::make('is_favorite')
                     ->native(false)
             ], layout: FiltersLayout::AboveContent)
 
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->successNotificationTitle('Product deleted'),
+                ])
+                    ->label('More Actions')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->size(ActionSize::Small)
+                    ->color('primary')
+                    ->button()
 
             ])
             ->bulkActions([

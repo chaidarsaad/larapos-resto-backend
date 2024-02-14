@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Placeholder;
@@ -12,7 +13,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -25,8 +28,6 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $recordTitleAttribute = 'name';
-
-
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
@@ -49,14 +50,13 @@ class UserResource extends Resource
                         ->dehydrated(fn (?string $state): bool => filled($state))
                         ->required(fn (string $operation): bool => $operation === 'create'),
 
-                    Select::make('roles')
+                    Select::make('role')
                         ->required()
                         ->native(false)
                         ->searchable()
                         ->options([
                             'admin' => 'Admin',
-                            'karyawan' => 'Karyawan',
-                            'user' => 'User',
+                            'Kasir' => 'Kasir',
                         ])
 
                 ])
@@ -69,16 +69,23 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('email')->searchable(),
-                TextColumn::make('roles')->searchable()
+                TextColumn::make('role')->searchable()
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->successNotificationTitle('User deleted'),
+                ])
+                    ->label('More Actions')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->size(ActionSize::Small)
+                    ->color('primary')
+                    ->button()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
