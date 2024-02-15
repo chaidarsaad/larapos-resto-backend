@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $url = "http://103.127.132.120/admin/login";
+    $url = "http://127.0.0.1:8000/admin/login";
 
     return Redirect::to($url);
 });
